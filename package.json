@@ -4,8 +4,8 @@
   "description": "Advent of code participation! https://adventofcode.com/2021",
   "main": "./build/index.js",
   "scripts": {
-    "build": "tsc",
-    "run": "node ./build/index.js"
+    "build": "tsc --sourcemap",
+    "start": "node ./build/index.js"
   },
   "repository": {
     "type": "git",
