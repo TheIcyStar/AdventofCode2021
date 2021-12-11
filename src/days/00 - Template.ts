@@ -5,5 +5,6 @@
 
 
 export function Run(data: string){
-    console.log("Hello world from day 00!")
+    console.log("Hello world from the day 00 module!")
+    console.log(data)
 }
