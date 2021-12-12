@@ -46,5 +46,8 @@ const path = require("path");
 
     //Run module
     let module = require(dayFile)
-    module.Run(data) 
+    module.RunA(data)
+    if(module.RunB){
+        module.RunB(data)
+    }
 })()

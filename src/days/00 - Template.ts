@@ -4,7 +4,7 @@
 */
 
 
-export function Run(data: string){
+export function RunA(data: string){
     console.log("Hello world from the day 00 module!")
     console.log(data)
 }
