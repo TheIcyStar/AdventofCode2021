@@ -32,3 +32,64 @@ export function RunA(data: string){
     console.log("epsilon: "+epsilon)
     console.log("Multiply result (Power consumption): "+gamma * epsilon)
 }
+
+export function filterWithSlot(array: string[], filterIndex: number): [string[], string[]]{
+    let onesList = []
+    let zeroesList = []
+    for(const row of array){
+        if(row[filterIndex] === "1"){
+            onesList.push(row)
+        } else {
+            zeroesList.push(row)
+        }
+    }
+
+    return [onesList, zeroesList]
+}
+
+export function RunB(data: string){
+    let dataArray = data.split(/\r?\n/)
+    let dataArrayCopy = [...dataArray]
+    let oxygen
+    let scrubber
+
+    //oxygen
+    for(let i=0; i < dataArray[0].length; i++){
+        let filterResult = filterWithSlot(dataArray, i)
+        if((filterResult[0].length === 1 && filterResult[1].length === 0) || (filterResult[0].length === 0 && filterResult[1].length === 1)){
+            break
+        }
+        if(filterResult[0].length >= filterResult[1].length){
+            dataArray = filterResult[0]
+        } else {
+            dataArray = filterResult[1]
+        }
+    }
+    oxygen = dataArray[0]
+
+    //scrubber
+    for(let i=0; i < dataArrayCopy[0].length; i++){
+        let filterResult = filterWithSlot(dataArrayCopy, i)
+        if((filterResult[0].length === 1 && filterResult[1].length === 0) || (filterResult[0].length === 0 && filterResult[1].length === 1)){
+            break
+        }
+        if(filterResult[0].length >= filterResult[1].length){
+            dataArrayCopy = filterResult[1]
+        } else {
+            dataArrayCopy = filterResult[0]
+        }
+    }
+    scrubber = dataArrayCopy[0]
+
+    //convert to base10
+    let oxyRating = parseInt(oxygen, 2)
+    let scrubRating = parseInt(scrubber, 2)
+
+    console.log("===== PART 2 RESULT =====")
+    console.log("oxygen: "+oxyRating)
+    console.log("scrubber: "+scrubRating)
+    console.log("Multiply result (life support rating): "+oxyRating * scrubRating)
+
+
+    let a = ""
+}
