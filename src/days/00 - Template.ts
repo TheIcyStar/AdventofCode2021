@@ -1,6 +1,7 @@
 /* Day 00 - Day template
     This is the template for a day's module
-    Each module has a Run() function that gets called with data from the index script
+    Each module has two functions: RunA() and RunB(), each for parts one and two for the days.
+    The index script passes the day's input data as a string to these functions.
 */
 
 
