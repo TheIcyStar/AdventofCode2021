@@ -105,7 +105,7 @@ export function RunA(data: string){
     for(const [point, value] of hitMap.entries()){
         if(value) multiHitCount++
     }
-    console.log("===== PART 1 RESULTS =====") //left off: found no points
+    console.log("===== PART 1 RESULTS =====")
     console.log("Final Count: "+multiHitCount)
 
 }
