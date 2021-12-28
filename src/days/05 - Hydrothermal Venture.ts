@@ -11,39 +11,22 @@ class Line {
         this.p2 = new Point(x2, y2)
     }
 
+    length(): number{
+        if(this.isDiagonal()){
+            return Math.abs(this.p1.x - this.p2.x)
+        } else {
+            return Math.abs((this.p1.x - this.p2.x) + (this.p1.y - this.p2.y))
+        }
+    }
+
     getLinePoints(): Point[]{
         let list: Point[] = []
-        if(!this.isDiagonal()){
-            //To avoid making spaghetti im making the loop super generalized
-            let constantCoord
-            let startCoord, endCoord
-            let dynamicX //true if X is coordinate that is changing, false is Y
+        let length = this.length()
+        let vector = new Point((this.p2.x - this.p1.x)/length, (this.p2.y - this.p1.y)/length) //just reuse the point class as a vector /shrug
 
-            if(this.p1.x !== this.p2.x){
-                dynamicX = true
-                constantCoord = this.p1.y
-                startCoord = (this.p2.x >= this.p1.x) ? this.p1.x : this.p2.x
-                endCoord  = (this.p2.x >= this.p1.x) ? this.p2.x : this.p1.x
-            } else {
-                dynamicX = false
-                constantCoord = this.p1.x
-                startCoord = (this.p2.y >= this.p1.y) ? this.p1.y : this.p2.y
-                endCoord  = (this.p2.y >= this.p1.y) ? this.p2.y : this.p1.y
-            }
-
-            for(let point=startCoord; point <= endCoord; point++){
-                let newPoint
-                if(dynamicX){
-                    newPoint = new Point(point, constantCoord)
-                } else {
-                    newPoint = new Point(constantCoord, point)
-
-                }
-                
-                list.push(newPoint)
-            }
-        } else {
-            console.error("getLinePoints is not implemented for diagonal lines!") //Hello future me!
+        for(let i=0; i<length+1; i++){
+            let newPoint = new Point(this.p1.x + (vector.x * i), this.p1.y + (vector.y * i))
+            list.push(newPoint)
         }
 
         return list
@@ -68,9 +51,8 @@ class Point {
     }
 }
 
-let lines: Line[] = []
-
-function buildLines(data: string, excludeDiagonals: boolean){
+function buildLines(data: string, excludeDiagonals: boolean): Line[]{
+    let lines: Line[] = []
     let numStrings = [...data.matchAll(/\d+/gm)]
     let numbersArray: number[] = []
     for(const numStr of numStrings){
@@ -82,11 +64,13 @@ function buildLines(data: string, excludeDiagonals: boolean){
         if(excludeDiagonals && newLine.isDiagonal()) continue
         lines.push(newLine)
     }
+
+    return lines
 }
 
 //Add all line points to the hitmap with a value of false. If it already exists then set the value to true 
 export function RunA(data: string){
-    buildLines(data, true)
+    let lines = buildLines(data, true)
     let hitMap: Map<string, boolean> = new Map()
 
     for(const line of lines){
@@ -107,5 +91,28 @@ export function RunA(data: string){
     }
     console.log("===== PART 1 RESULTS =====")
     console.log("Final Count: "+multiHitCount)
+}
 
+export function RunB(data: string){
+    let lines = buildLines(data, false)
+    let hitMap: Map<string, boolean> = new Map()
+
+    for(const line of lines){
+        let linePoints = line.getLinePoints()
+        for(const point of linePoints){
+            let pointStr = point.toPointString()
+            if(hitMap.has(pointStr)){
+                hitMap.set(pointStr, true)
+            } else {
+                hitMap.set(pointStr, false)
+            }
+        }
+    }
+
+    let multiHitCount = 0
+    for(const [point, value] of hitMap.entries()){
+        if(value) multiHitCount++
+    }
+    console.log("===== PART 2 RESULTS =====")
+    console.log("Final Count: "+multiHitCount) //left off: answer too high
 }
